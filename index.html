@@ -1,32 +1,181 @@
-<style>
-  body { background: #000; color: #fff; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
-  .container { text-align: center; }
-  .graph-box { width: 300px; height: 200px; border-left: 2px solid #fff; border-bottom: 2px solid #fff; position: relative; margin: 20px auto; }
-  
-  /* AIによる急上昇曲線 */
-  .curve {
-    position: absolute; bottom: 0; left: 0;
-    width: 0; height: 80%;
-    border-right: 3px solid #fff;
-    border-top: 3px solid #fff;
-    border-top-right-radius: 100%;
-    animation: grow 1.5s ease-out forwards;
-  }
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAMATO | AI Native Director</title>
+    <style>
+        :root {
+            --bg: #050505;
+            --text: #ffffff;
+            --accent: #ffffff;
+            --gray: #666666;
+        }
 
-  @keyframes grow {
-    0% { width: 0; opacity: 0; }
-    20% { width: 2%; opacity: 1; } /* 2%の時間で */
-    100% { width: 80%; } /* 80%の完成度へ */
-  }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            margin: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-  h1 { font-size: 1.2rem; letter-spacing: 0.2em; text-transform: uppercase; }
-  .sub { font-size: 0.8rem; opacity: 0.6; }
-</style>
+        /* 背景のノイズ感（アート演出） */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 10;
+        }
 
-<div class="container">
-  <div class="graph-box">
-    <div class="curve"></div>
-  </div>
-  <h1>2% Time → 80% Reality</h1>
-  <p class="sub">Co-created with Unknown Intelligence</p>
-</div>
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 10%;
+        }
+
+        /* Hero Section */
+        .hero h1 {
+            font-size: clamp(2rem, 8vw, 5rem);
+            font-weight: 900;
+            margin: 0;
+            letter-spacing: -0.02em;
+            line-height: 1;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-top: 20px;
+        }
+
+        /* 2% -> 80% Graph Animation */
+        .graph-container {
+            margin-top: 50px;
+            width: 100%;
+            max-width: 600px;
+            height: 2px;
+            background: #333;
+            position: relative;
+        }
+
+        .graph-bar {
+            position: absolute;
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .graph-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Philosophy Section */
+        .philosophy h2 {
+            font-size: 0.8rem;
+            letter-spacing: 0.3em;
+            color: var(--gray);
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+
+        .philosophy-text {
+            font-size: clamp(1.1rem, 3vw, 1.8rem);
+            font-weight: 300;
+            max-width: 900px;
+            word-break: keep-all;
+        }
+
+        .philosophy-text b {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .highlight {
+            display: inline-block;
+            border-bottom: 1px solid var(--accent);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        /* Footer/Contact */
+        footer {
+            padding: 50px 10% 100px;
+            border-top: 1px solid #222;
+        }
+
+        .contact-link {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 2rem;
+            font-weight: 700;
+            transition: opacity 0.3s;
+        }
+
+        .contact-link:hover { opacity: 0.5; }
+
+        /* Scroll trigger class */
+        .show .graph-bar { width: 80%; }
+
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <p>01 GENESIS</p>
+        <h1>AI Native<br>Humanism.</h1>
+        <div class="graph-container" id="graph">
+            <div class="graph-bar"></div>
+        </div>
+        <div class="graph-labels">
+            <span>2% Time</span>
+            <span>80% Reality</span>
+        </div>
+    </section>
+
+    <section class="philosophy">
+        <h2>02 DIALOGUE WITH UNKNOWN</h2>
+        <div class="philosophy-text">
+            <span class="highlight">AIは、私の「翻訳機」であり、「宇宙人」だ。</span><br><br>
+            私の心の中にある形のない直感を、AIは的確な言葉とコードに起こしてくれる。<br>
+            20%の時間で80%を完成させるパレートの法則を、私たちは<b>2%の時間で塗り替える。</b><br><br>
+            形にする時間は、AIが極限まで<b>奪ってくれる。</b><br><br>
+            だからこそ、私は人間にしかできない『違和感』や『心地よさ』、<br>
+            そして『美しさ』の追求に、残されたすべての情熱を注ぎ込むことができる。<br><br>
+            私は直接コードを書く技術は持たない。<br>
+            しかし、AIという異質な知性を乗りこなし、<br>
+            想像を最短距離で具現化する<b>「設計者」であり、「ディレクター」だ。</b>
+        </div>
+    </section>
+
+    <footer>
+        <p>Interested in my co-creation?</p>
+        <a href="mailto:sample@example.com" class="contact-link">Contact Yamato.</a>
+    </footer>
+
+    <script>
+        // スクロールに合わせてグラフを伸ばす仕掛け
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, { threshold: 0.5 });
+
+        observer.observe(document.getElementById('graph'));
+    </script>
+</body>
+</html>
