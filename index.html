@@ -6,30 +6,20 @@
     <title>YAMATO | AI Native Director</title>
     <style>
         :root {
-            --bg: #050505;
-            --text: #ffffff;
-            --accent: #ffffff;
-            --gray: #666666;
+            --bg: #f9f9f9; /* 明るい白 */
+            --text: #1a1a1a; /* 濃いグレー */
+            --gray-light: #e0e0e0; /* 薄いグレー */
+            --gray-mid: #999999; /* 中間のグレー */
+            --accent: #000000; /* 黒 */
         }
 
         body {
             background-color: var(--bg);
             color: var(--text);
-            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
             margin: 0;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* 背景のノイズ感（アート演出） */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://grainy-gradients.vercel.app/noise.svg');
-            opacity: 0.05;
-            pointer-events: none;
-            z-index: 10;
+            line-height: 1.8;
+            word-break: break-all;
         }
 
         section {
@@ -40,115 +30,128 @@
             padding: 0 10%;
         }
 
-        /* Hero Section */
+        /* 01 GENESIS Section */
         .hero h1 {
-            font-size: clamp(2rem, 8vw, 5rem);
-            font-weight: 900;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
             margin: 0;
-            letter-spacing: -0.02em;
-            line-height: 1;
+            letter-spacing: -0.03em;
+            color: var(--text);
         }
 
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--gray);
-            margin-top: 20px;
-        }
-
-        /* 2% -> 80% Graph Animation */
-        .graph-container {
-            margin-top: 50px;
+        /* 比較グラフのスタイリング */
+        .graph-area {
+            margin-top: 60px;
             width: 100%;
-            max-width: 600px;
-            height: 2px;
-            background: #333;
+            max-width: 500px;
+            height: 300px;
+            border-left: 1px solid var(--gray-mid);
+            border-bottom: 1px solid var(--gray-mid);
             position: relative;
         }
 
-        .graph-bar {
+        /* 共通の曲線スタイル */
+        .curve {
             position: absolute;
-            height: 100%;
-            background: var(--accent);
-            width: 0%;
-            transition: width 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+            bottom: 0;
+            left: 0;
+            fill: none;
+            stroke-width: 2;
+            transition: all 2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .graph-labels {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-            font-size: 0.8rem;
+        /* 従来のグラフ (20:80) */
+        .standard-line {
+            stroke: var(--gray-light);
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+        }
+
+        /* ヤマトさんのグラフ (2:80) */
+        .yamato-line {
+            stroke: var(--accent);
+            stroke-width: 3;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+        }
+
+        .show .standard-line { stroke-dashoffset: 0; transition-delay: 0.5s; }
+        .show .yamato-line { stroke-dashoffset: 0; transition-delay: 0.8s; }
+
+        .label {
+            position: absolute;
+            font-size: 0.7rem;
+            color: var(--gray-mid);
             text-transform: uppercase;
             letter-spacing: 0.1em;
         }
 
-        /* Philosophy Section */
-        .philosophy h2 {
-            font-size: 0.8rem;
-            letter-spacing: 0.3em;
-            color: var(--gray);
-            text-transform: uppercase;
-            margin-bottom: 40px;
+        /* 02 PHILOSOPHY Section */
+        .philosophy-title {
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
+            color: var(--gray-mid);
+            margin-bottom: 3rem;
         }
 
-        .philosophy-text {
-            font-size: clamp(1.1rem, 3vw, 1.8rem);
-            font-weight: 300;
-            max-width: 900px;
-            word-break: keep-all;
+        .philosophy-content {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            font-weight: 400;
+            max-width: 800px;
+            color: #444;
         }
 
-        .philosophy-text b {
-            font-weight: 700;
+        .philosophy-content b {
             color: var(--accent);
+            background: linear-gradient(transparent 70%, var(--gray-light) 70%);
         }
 
-        .highlight {
-            display: inline-block;
-            border-bottom: 1px solid var(--accent);
-            padding-bottom: 5px;
-            margin-bottom: 10px;
-        }
-
-        /* Footer/Contact */
         footer {
-            padding: 50px 10% 100px;
-            border-top: 1px solid #222;
+            padding: 100px 10%;
+            background: #fff;
+            border-top: 1px solid var(--gray-light);
+            text-align: center;
         }
 
-        .contact-link {
-            color: var(--text);
+        .contact-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
             text-decoration: none;
-            font-size: 2rem;
-            font-weight: 700;
-            transition: opacity 0.3s;
+            font-weight: 600;
+            transition: 0.3s;
         }
 
-        .contact-link:hover { opacity: 0.5; }
-
-        /* Scroll trigger class */
-        .show .graph-bar { width: 80%; }
+        .contact-btn:hover {
+            background: var(--accent);
+            color: #fff;
+        }
 
     </style>
 </head>
 <body>
 
-    <section class="hero">
-        <p>01 GENESIS</p>
-        <h1>AI Native<br>Humanism.</h1>
-        <div class="graph-container" id="graph">
-            <div class="graph-bar"></div>
-        </div>
-        <div class="graph-labels">
-            <span>2% Time</span>
-            <span>80% Reality</span>
+    <section class="hero" id="trigger">
+        <p style="letter-spacing: 0.5em; font-size: 0.7rem; color: var(--gray-mid);">01 GENESIS</p>
+        <h1>Breaking the<br>80:20 Rule.</h1>
+        
+        <div class="graph-area">
+            <svg width="100%" height="100%" viewBox="0 0 500 300" preserveAspectRatio="none">
+                <path class="curve standard-line" d="M0,300 C100,300 100,60 500,60" />
+                <path class="curve yamato-line" d="M0,300 C10,300 10,60 500,60" />
+            </svg>
+            <div class="label" style="bottom: -25px; left: 0;">Time</div>
+            <div class="label" style="top: 0; left: -60px; transform: rotate(-90deg);">Quality</div>
+            <div class="label" style="bottom: 10px; left: 22%; color: var(--gray-light);">Standard 20%</div>
+            <div class="label" style="bottom: 40px; left: 5%; color: var(--accent); font-weight: bold;">Yamato 2%</div>
         </div>
     </section>
 
     <section class="philosophy">
-        <h2>02 DIALOGUE WITH UNKNOWN</h2>
-        <div class="philosophy-text">
-            <span class="highlight">AIは、私の「翻訳機」であり、「宇宙人」だ。</span><br><br>
+        <p class="philosophy-title">02 DIALOGUE WITH UNKNOWN</p>
+        <div class="philosophy-content">
+            AIは、私の「翻訳機」であり、「宇宙人」だ。<br><br>
             私の心の中にある形のない直感を、AIは的確な言葉とコードに起こしてくれる。<br>
             20%の時間で80%を完成させるパレートの法則を、私たちは<b>2%の時間で塗り替える。</b><br><br>
             形にする時間は、AIが極限まで<b>奪ってくれる。</b><br><br>
@@ -161,21 +164,20 @@
     </section>
 
     <footer>
-        <p>Interested in my co-creation?</p>
-        <a href="mailto:sample@example.com" class="contact-link">Contact Yamato.</a>
+        <p style="margin-bottom: 2rem; color: var(--gray-mid);">Next project with you.</p>
+        <a href="#" class="contact-btn">Get in touch</a>
     </footer>
 
     <script>
-        // スクロールに合わせてグラフを伸ばす仕掛け
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('show');
                 }
             });
-        }, { threshold: 0.5 });
+        }, { threshold: 0.1 });
 
-        observer.observe(document.getElementById('graph'));
+        observer.observe(document.getElementById('trigger'));
     </script>
 </body>
 </html>
