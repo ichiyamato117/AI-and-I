@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAMATO | AI Native Director</title>
+    <style>
+        :root {
+            --bg: #f9f9f9; /* 明るい白 */
+            --text: #1a1a1a; /* 濃いグレー */
+            --gray-light: #e0e0e0; /* 薄いグレー */
+            --gray-mid: #999999; /* 中間のグレー */
+            --accent: #000000; /* 黒 */
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
+            margin: 0;
+            line-height: 1.8;
+            word-break: break-all;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 10%;
+        }
+
+        /* 01 GENESIS Section */
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -0.03em;
+            color: var(--text);
+        }
+
+        /* 比較グラフのスタイリング */
+        .graph-area {
+            margin-top: 60px;
+            width: 100%;
+            max-width: 500px;
+            height: 300px;
+            border-left: 1px solid var(--gray-mid);
+            border-bottom: 1px solid var(--gray-mid);
+            position: relative;
+        }
+
+        /* 共通の曲線スタイル */
+        .curve {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            fill: none;
+            stroke-width: 2;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* 従来のグラフ (20:80) */
+        .standard-line {
+            stroke: var(--gray-light);
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+        }
+
+        /* ヤマトさんのグラフ (2:80) */
+        .yamato-line {
+            stroke: var(--accent);
+            stroke-width: 3;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+        }
+
+        .show .standard-line { stroke-dashoffset: 0; transition-delay: 0.5s; }
+        .show .yamato-line { stroke-dashoffset: 0; transition-delay: 0.8s; }
+
+        .label {
+            position: absolute;
+            font-size: 0.7rem;
+            color: var(--gray-mid);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* 02 PHILOSOPHY Section */
+        .philosophy-title {
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
+            color: var(--gray-mid);
+            margin-bottom: 3rem;
+        }
+
+        .philosophy-content {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            font-weight: 400;
+            max-width: 800px;
+            color: #444;
+        }
+
+        .philosophy-content b {
+            color: var(--accent);
+            background: linear-gradient(transparent 70%, var(--gray-light) 70%);
+        }
+
+        /* 03 ARTIFACTS Section */
+        .artifacts-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 120px;
+        }
+
+        .project-card {
+            display: flex;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .project-card:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .project-image {
+            flex: 1;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            background: #fff;
+            padding: 10px;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .project-info {
+            flex: 1;
+        }
+
+        .project-info h3 {
+            font-size: 2rem;
+            margin: 0 0 20px;
+            font-weight: 800;
+        }
+
+        .project-description {
+            font-size: 1rem;
+            color: #444;
+            margin-bottom: 30px;
+        }
+
+        .link-group {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .github-link {
+            display: inline-block;
+            padding: 12px 30px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .github-link:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .qr-code {
+            width: 80px;
+            height: 80px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .qr-code:hover {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .project-card, .project-card:nth-child(even) {
+                flex-direction: column;
+                gap: 30px;
+            }
+            .project-image { width: 100%; }
+        }
+
+        footer {
+            padding: 100px 10%;
+            background: #fff;
+            border-top: 1px solid var(--gray-light);
+            text-align: center;
+        }
+
+        .contact-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .contact-btn:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
+            color: var(--gray-mid);
+            margin-bottom: 4rem;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero" id="trigger">
+        <p style="letter-spacing: 0.5em; font-size: 0.7rem; color: var(--gray-mid);">01 GENESIS</p>
+        <h1>Breaking the<br>80:20 Rule.</h1>
+    </section>
+
+    <section class="philosophy">
+        <p class="philosophy-title">02 AI COLLABORATION</p>
+        <div class="philosophy-content">
+            AIを開発パートナーとして活用し、作業効率の向上・時間の短縮が実現可能に。<br><br>
+            コーディング時間をAIが極限まで短縮してくれるから、<br><br>
+            人間にしかできない「違和感」と「心地よさ」、<br>
+            そして「美しさ」の追求に、すべての情熱を注ぎ込める。<br><br>
+            私は直接的なコーディング技術は持たないが、<br>
+            AIという異質な知性を乗りこなし、<br>
+            想像を最短距離で具現化する<b>「設計者」であり、「ディレクター」だ。</b>
+        </div>
+    </section>
+
+    <section class="artifacts">
+        <p class="section-title">03 ARTIFACTS</p>
+        
+        <div class="artifacts-grid">
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="dreamtree_image.png" alt="Dream Tree - タスク管理アプリのスクリーンショット">
+                </div>
+                <div class="project-info">
+                    <h3>Dream Tree</h3>
+                    <p class="project-description">
+                        目標を「木」として視覚化し、成長を実感させるタスク管理アプリ。
+                        AIとの対話により、親子関係のデータ構造とアニメーションを爆速で実装。
+                        残りの時間で、ユーザーが「育てる喜び」を感じるUIの微調整に心血を注ぎました。
+                    </p>
+                    <div class="link-group">
+                        <a href="https://ichiyamato117.github.io/dream.tree/" target="_blank" class="github-link">View Project</a>
+                        <img src="dreamtree_QR.png" alt="Dream Tree QR Code" class="qr-code">
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="chordquiz_image.png" alt="Chord Quiz - 音楽学習アプリのスクリーンショット">
+                </div>
+                <div class="project-info">
+                    <h3>Chord Quiz</h3>
+                    <p class="project-description">
+                        J-POPの定番コード進行を遊びながら学べる音楽学習ツール。
+                        複雑な音楽理論のロジックをAIと共創し、私は「直感的に触れる楽しさ」という
+                        デザインのUX設計に集中することで、短期間で高い完成度を実現しました。
+                    </p>
+                    <div class="link-group">
+                        <a href="https://ichiyamato117.github.io/chords.quiz/" target="_blank" class="github-link">View Project</a>
+                        <img src="chordquiz_QR.png" alt="Chord Quiz QR Code" class="qr-code">
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="yourparameter_image.png" alt="お前パラメーター - RPGタスク管理アプリのスクリーンショット">
+                </div>
+                <div class="project-info">
+                    <h3>お前パラメーター</h3>
+                    <p class="project-description">
+                        ゲーム感覚でタスク管理を楽しめるRPG風タスク管理アプリ。
+                        パラメーターシステムで成長を可視化し、日々のタスクをクエストとして体験。
+                        ユーザーが自分だけのパラメーター設定を構築できる自由度の高い設計を実現しました。
+                    </p>
+                    <div class="link-group">
+                        <a href="https://ichiyamato117.github.io/yourparameter/" target="_blank" class="github-link">View Project</a>
+                        <img src="yourparameter_QR.png" alt="お前パラメーター QR Code" class="qr-code">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p style="margin-bottom: 2rem; color: var(--gray-mid);">Next project with you.</p>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        observer.observe(document.getElementById('trigger'));
+    </script>
+</body>
+</html>
